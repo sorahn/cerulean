@@ -1,8 +1,8 @@
 {
   "name": "shadow-of-silver",
-  "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.1",
+  "description": "Mapping the Pokemon regions around Mt. Silver",
+  "main": "web.coffee",
   "dependencies": {
     "async": "~0.2.10",
     "express": "~3.5.0",
@@ -10,10 +10,17 @@
     "lodash": "~2.4.1",
     "jade": "~1.3.0"
   },
-  "devDependencies": {},
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.4.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/drbrts/shadow-of-silver"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Daryl Roberts",
   "license": "ISC"
 }
