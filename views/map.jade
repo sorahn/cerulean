@@ -1,0 +1,26 @@
+style(type='text/css').
+  .map {
+    width: #{(map.width * 64)}px;
+    height: #{(map.height * 64)}px;
+  }
+  .block {
+    width: 64px;
+    height: 64px;
+    float: left;
+    background: #444
+  }
+  .tile {
+    width: 16px;
+    height: 16px;
+    float: left;
+    background-image: url(/public/tilesets/tileset#{tile_data.tile.background}.png);
+  }
+
+.map
+  each block in raster
+    .block
+      if block
+        each tile in block
+          .tile(style='background-position: -#{tile[1]}px -#{tile[0]}px;')
+
+pre #{inspect(raster)}

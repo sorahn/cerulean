@@ -1,0 +1,30 @@
+style.
+  .container {
+    float: left;
+  }
+  .block {
+    width: 64px;
+    height: 64px;
+    float: left;
+  }
+
+  .tile {
+    width: 16px;
+    height: 16px;
+    float: left;
+    background-image: url(/public/tilesets/tileset#{num}.png);
+  }
+  pre {
+    clear: both
+  }
+
+.container
+  each block in tileset
+    .block
+      if block
+        each t in block
+          .tile(style='background-position: -#{t[1]}px -#{t[0]}px;')
+
+pre #{inspect(tile, {depth: 3})}
+pre #{inspect(tileset, {depth: 3})}
+
