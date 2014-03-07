@@ -153,6 +153,6 @@ app.get '/map/:name', (req, res) ->
 fs.open 'Pokemon Crystal.gbc', 'r', (s, fd) ->
   app.set 'fd', fd
   return console.log s.message if s
-  app.listen 9000
+  app.listen process.env.PORT or 9000
 
 
