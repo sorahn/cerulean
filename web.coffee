@@ -1,6 +1,7 @@
 _          = require 'lodash'
 fs         = require 'fs'
 ini        = require 'ini'
+harp       = require 'harp'
 util       = require 'util'
 async      = require 'async'
 express    = require 'express'
@@ -131,6 +132,7 @@ app.configure ->
   app.use app.router
   app.use express.static "#{__dirname}/bower_components"
   app.use '/public', express.static "#{__dirname}/public"
+  app.use '/public', harp.mount "#{__dirname}/public"
 
 app.get '/', (req, res) -> res.render 'index', {maplist, maps_array}
 
