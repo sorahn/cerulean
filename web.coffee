@@ -16,9 +16,11 @@ tiles_ini  = parse_ini 'ini/Tilesets.ini'
 maplist    = parse_ini 'ini/Main.ini'
 
 # Set up a better maps array
-for title, map of maps_ini
-  map.title = title
-  maps_array.push map
+for title, map of maplist
+  area = {}
+  area.title = title
+  area.maps = map
+  maps_array.push area
 
 # Console Log with util.inspect built in.
 clog = (obj) -> console.log util.inspect obj, {depth: 5, colors: true}
