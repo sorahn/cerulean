@@ -1,0 +1,20 @@
+{
+  "name": "shadow-of-silver",
+  "version": "0.0.0",
+  "homepage": "https://github.com/drbrts/shadow-of-silver",
+  "authors": [
+    "Daryl Roberts <d@rbrts.io>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.1.1",
+    "masonry": "~3.1.4"
+  }
+}

@@ -12,6 +12,7 @@ parse_ini  = (file) -> ini.parse fs.readFileSync file, 'utf-8'
 maps_array = []
 maps_ini   = parse_ini 'ini/Maps.ini'
 tiles_ini  = parse_ini 'ini/Tilesets.ini'
+maplist    = parse_ini 'ini/Main.ini'
 
 # Set up a better maps array
 for title, map of maps_ini
@@ -128,7 +129,10 @@ app.configure ->
     inspect: util.inspect
 
   app.use app.router
+  app.use express.static "#{__dirname}/bower_components"
   app.use '/public', express.static "#{__dirname}/public"
+
+app.get '/', (req, res) -> res.render 'index', {maplist, maps_array}
 
 app.get '/tileset/:num', ({params: {num}}, res) ->
   get_tileset num, (err, [template, data]) -> res.render template, data
@@ -154,5 +158,3 @@ fs.open 'Pokemon Crystal.gbc', 'r', (s, fd) ->
   app.set 'fd', fd
   return console.log s.message if s
   app.listen process.env.PORT or 9000
-
-
