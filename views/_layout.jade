@@ -167,7 +167,6 @@ script.
     $('.js-group').on('click', function (e) {
       var $this = $(this)
       var width = $(this).data('width') * 64
-      var $mapview = $('#map-view')
 
       $('#map-name').text($this.data('title')).next('.hide').removeClass('hide')
       $('#map-link').attr('href', '/map/' + $this.data('title'))
@@ -175,18 +174,21 @@ script.
       $('#iframe')
         .removeAttr('style')
         .attr('src', '/map/' + $this.data('title'))
+        .attr('data-src', $this.data('title'))
         .width(width)
         .height($this.data('height') * 64)
 
-      if (width > $mapview.width()) {
-          $('#iframe').css('transform', 'scale(' + $mapview.width() / width + ')')
-          console.log(width / $mapview.width())
-      }
+      resizeMap()
     })
-
+    window.onresize = resizeMap
   })
-  //- $(function () {
-  //-   $('#masonry').masonry({
-  //-     columnWidth:
-  //-     })
-  //-   })
+  function resizeMap() {
+    var title = $('#iframe').data('src')
+    var map = $('[data-title="' + title + '"]')
+    var width = map.data('width') * 64
+    var $mapview = $('#map-view')
+
+    if (width > $mapview.width()) {
+      $('#iframe').css('transform', 'scale(' + $mapview.width() / width + ')')
+    }
+  }
