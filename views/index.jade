@@ -1,3 +1,14 @@
 extends _layout.jade
 
-h1 hi aaron
+block main
+  h1.page-heading
+    | Creulean Map Viewer&nbsp;
+    small
+      a#map-link
+        span#map-name
+        | &nbsp;
+        small.hide.glyphicon.glyphicon-export
+
+  .well
+    #map-view
+      iframe#iframe(seamless, scrolling='no')

@@ -82,8 +82,6 @@ deep_map = (array, fn) -> array.map (a) -> a.map (b) -> b.map (fn)
 
 # @TODO Combine these functions
 buffer_to_array = (buffer) ->
-  clog buffer
-  clog buffer.readUInt8 0
   Array::map.call buffer, (num) -> "00#{num.toString 16}".substr(-2).split ''
 
 buffer_to_pairs = (buffer) ->

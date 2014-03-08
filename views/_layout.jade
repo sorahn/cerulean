@@ -2,167 +2,40 @@ doctype html
 head
   meta(charset="utf-8")
   link(rel="icon", href="/public/favicon.ico", type="image/x-icon")
-  title Shadow of Silver Map Viewer
+  title Cerulean Map Viewer
 
   link(rel='stylesheet', href='/bootstrap/dist/css/bootstrap.css')
+  link(rel='stylesheet', href='/public/assets/cerulean.css')
+  link(rel='stylesheet', href='/public/assets/style.css')
 
   script(src='/jquery/dist/jquery.js')
   script(src='/bootstrap/dist/js/bootstrap.js')
   script(src='/masonry/masonry.js')
-  style.
-    /*
-     * Base structure
-     */
-
-    /* Move down content because we have a fixed navbar that is 50px tall */
-    body {
-      padding-top: 50px;
-    }
-
-    #map-view {
-      width: 100%
-    }
-    .navbar-fixed-top .container {
-      width: 100%;
-    }
-    .navbar-form {
-      padding: 0;
-    }
-
-    @media (min-width: 768px) {
-      .navbar-form .form-control {
-        width: 100%;
-      }
-    }
-    /*
-     * Global add-ons
-     */
-
-    .sub-header {
-      padding-bottom: 10px;
-      border-bottom: 1px solid #eee;
-    }
-
-
-    /*
-     * Sidebar
-     */
-
-    /* Hide for mobile, show later */
-    .sidebar {
-      display: none;
-    }
-    @media (min-width: 768px) {
-      .sidebar {
-        position: fixed;
-        top: 51px;
-        bottom: 0;
-        left: 0;
-        z-index: 1000;
-        display: block;
-        padding: 20px;
-        overflow-x: hidden;
-        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-        background-color: #f5f5f5;
-        border-right: 1px solid #eee;
-      }
-    }
-
-    /* Sidebar navigation */
-    .nav-sidebar {
-      margin-right: -21px; /* 20px padding + 1px border */
-      margin-bottom: 20px;
-      margin-left: -20px;
-    }
-    .nav-sidebar > li > a {
-      padding-right: 20px;
-      padding-left: 20px;
-    }
-    .nav-sidebar > .active > a {
-      color: #fff;
-      background-color: #428bca;
-    }
-
-
-    /*
-     * Main content
-     */
-
-    .main {
-      padding: 20px;
-    }
-    @media (min-width: 768px) {
-      .main {
-        padding-right: 40px;
-        padding-left: 40px;
-      }
-    }
-    .main .page-header {
-      margin-top: 0;
-    }
-
-
-    /*
-     * Placeholder dashboard ideas
-     */
-
-    .placeholders {
-      margin-bottom: 30px;
-      text-align: center;
-    }
-    .placeholders h4 {
-      margin-bottom: 0;
-    }
-    .placeholder {
-      margin-bottom: 20px;
-    }
-    .placeholder img {
-      display: inline-block;
-      border-radius: 50%;
-    }
-
-    #iframe {
-      margin: 0 auto;
-      -webkit-transform-origin: top left
-    }
 
   block head
 
 body
-  .navbar.navbar-inverse.navbar-fixed-top
+  header.navbar.navbar-inverse.navbar-fixed-top
     .container
       .row
         .col-sm-3.col-md-2
           form.navbar-form
-            input.form-control(type="text")
+            input.form-control(type="text", placeholder="Filter Maps")
 
-  .contianer-fluid
+  section.contianer-fluid
     .row
-      .sidebar.col-sm-3.col-md-2
+      nav.sidebar.col-sm-3.col-md-2
         ul.nav.nav-sidebar
           each map in maps_array
             li
               a.js-group(data-title="#{map.title}", data-width="#{map['X Size']}", data-height="#{map['Y Size']}") #{map.title}
 
-      .main.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2
-        h1.page-heading
-          | Map Viewer&nbsp;
-          small
-            a#map-link
-              span#map-name
-              | &nbsp;
-              small.hide.glyphicon.glyphicon-export
-
-        .well
-          #map-view
-            iframe#iframe(seamless, scrolling='no')
-
-
-                //- iframe(seamless, src="/map/#{map}", style="max-width: 100%")
-                //- <iframe seamless style="width: >
+      main.main.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2
+        block main
 
 
 script.
+
   $(function () {
     $('.js-group').on('click', function (e) {
       var $this = $(this)
