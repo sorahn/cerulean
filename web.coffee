@@ -119,11 +119,10 @@ app.get '/map/:name', (req, res) ->
     raster = map_data.mapset.map (str) ->
       tile_data.tileset["#{str}".get_hex() - 1]
 
-
     # res.send raster
     res.render map_tmplt, {raster, map_data, map, tile_data}
 
-fs.open 'Pokemon Crystal.gbc', 'r', (s, fd) ->
+fs.open 'PM_CRYSTAL.GBC', 'r', (s, fd) ->
   app.set 'fd', fd
   return console.log s.message if s
   app.listen process.env.PORT or 9000

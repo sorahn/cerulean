@@ -4,19 +4,23 @@ binary    = require 'binary'
 {resolve} = require 'path'
 
 # Return the hex value of a string
-String::getHex = -> parseInt @, 16
+String::asDec = -> parseInt @, 16
 
 # Parse ini style numbers in strings.
 #   hex = '$123ABC'
 #   dec = '123456'
 String::stupidHex = ->
-  if "#{@.charAt 0}" is '$' then do "#{@.slice 1}".getHex else +@
+  if "#{@.charAt 0}" is '$' then do "#{@.slice 1}".asDec else +@
+
+
 
 class Cerulean
   constructor: () ->
     @main = @readIni resolve 'ini/Main.ini'
     @maps = @readIni resolve 'ini/Maps.ini'
     @tiles = @readIni resolve 'ini/Tilesets.ini'
+    fs.open 'PM_CRYSTAL.GBC', 'r', (s, @fd) =>
+      do @readMapHeaders
 
   get: -> @[arguments[0]]
 
@@ -27,7 +31,6 @@ class Cerulean
     tile = @parseTileData @tiles[num]
 
   readIni: (file) ->
-    console.info "parse ini file #{file}"
     data = ini.parse fs.readFileSync file, 'utf-8'
 
   # Maps.ini
@@ -56,5 +59,42 @@ class Cerulean
     blocks: raw['Blocks'].stupidHex()
     background: raw['Tiles'].match(/\d+/)[0]
     raw: raw
+
+  # 0x94000 is where the Pokemon G/S/C map data starts
+  # There are 26 Map groups.
+  readMapHeaders: ->
+    mapGroups = []
+
+    size = 52
+    buffer = new Buffer size
+    fs.read @fd, buffer, 0, size, do "94000".asDec, =>
+      for i in [1..size] by 2
+        mapGroups.push "9#{(buffer.readUInt16LE i - 1).toString(16)}"
+
+      @readMapGroups mapGroups
+
+  # Each map is 9 bytes long
+  readMapGroups: (mapGroups) ->
+    for offset, i in mapGroups
+      maps = []
+      size = 9
+      buffer = new Buffer size
+      fs.read @fd, buffer, 0, size, do offset.asDec, =>
+        console.log buffer.toString 'hex'
+        mapHeader = {}
+        tmp =
+          binary
+            .parse(buffer)
+            .word8('bank')
+            .word8('tileset')
+            .word8('permission')
+            .word16le('secondMapHeader')
+            .word8('location')
+            .word8('music')
+            .word8('time')
+            .word8('fishing')
+            .vars
+
+        console.log mapHeader
 
 module.exports = -> new Cerulean
