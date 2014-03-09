@@ -1,13 +1,12 @@
 _          = require 'lodash'
 fs         = require 'fs'
-ini        = require 'ini'
 harp       = require 'harp'
 util       = require 'util'
 async      = require 'async'
 express    = require 'express'
 slug       = require 'slug'
 app        = express()
-cerulean   = require('./lib/cerulean') app
+cerulean   = do require './lib/cerulean'
 
 main_array = []
 maps_ini   = cerulean.get 'maps'
@@ -17,7 +16,7 @@ main_ini   = cerulean.get 'main'
 for title, maplist of main_ini
   area =
     title: title
-    id: slug title
+    id: "#{title.replace /[\. ]/g, '_'}".toLowerCase().replace /__/, '_'
     maps: []
   for key, value of maplist
     cleanValue = value.replace /\\/g, ''
@@ -30,44 +29,6 @@ for title, maplist of main_ini
 
 # Console Log with util.inspect built in.
 clog = (obj) -> console.log util.inspect obj, {depth: 5, colors: true}
-
-# Maps.ini
-# [Goldenrod Gym]
-# Start Offset=$AFBC7
-# X Size=10
-# Y Size=9
-# Tileset=20
-
-# Parse the map data and add some other useful fields to the map object.
-parse_map_data = (map) ->
-  offset: parse_hex map['Start Offset']
-  width: +map['X Size']
-  height: +map['Y Size']
-  tileset: +map['Tileset']
-  title: map.title
-  size: map['X Size'] * map['Y Size']
-
-# Tilesets.ini
-# [1]
-# Start offset=$19c1e
-# Tiles=crys1.dib
-# Blocks=127
-
-# Parse the tile data.
-parse_tile_data = (tile) ->
-  offset: stupid_hex tile['Start offset']
-  tiles: tile['Tiles']
-  blocks: parse_hex tile['Blocks']
-  background: tile['Tiles'].match(/\d+/)[0]
-
-# Parse ini style numbers.
-#   hex = $123ABC
-#   dec = 123456
-parse_hex = (str) ->
-  if str.indexOf('$') is -1 then parseInt str, 10
-  else stupid_hex str
-
-stupid_hex = (str) -> "#{str}".slice(1).get_hex()
 
 # String helper to convert get it's hex value.
 String::get_hex = -> parseInt @, 16
@@ -101,7 +62,7 @@ build_tileset = (buffer) ->
   deep_map tileset, get_sprite_offset
 
 get_tileset = (num, callback) ->
-  tile = parse_tile_data tiles_ini[+num]
+  tile = cerulean.getTile num
   {offset, blocks} = tile
   size = blocks * 16
   read_buffer {size, offset}, (buffer) ->
@@ -147,7 +108,7 @@ app.get '/tileset/:num', ({params: {num}}, res) ->
 
 app.get '/map/:name', (req, res) ->
   {name} = req.params
-  map = parse_map_data get_map name
+  map = cerulean.getMap name
   {offset, width, height, tileset, title} = map
 
   async.parallel
