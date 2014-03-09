@@ -16,20 +16,17 @@ tiles_ini  = parse_ini 'ini/Tilesets.ini'
 arealist   = parse_ini 'ini/Main.ini'
 
 for title, maplist of arealist
-  area = {}
-  area.title = title
-  area.id = title.replace(/\s*/g, '')
-  area.maps = []
+  area =
+    title: title
+    id: title.replace(/\s*/g, '')
+    maps: []
   for key, value of maplist
-    map = {}
-    map.title = value.replace('\\', '')
-    console.log map.title
-    if maps_ini[value]?
-      map.x = maps_ini[value]['X Size']
-      map.y = maps_ini[value]['Y Size']
-    else
-      map.x = 10
-      map.y = 10
+    cleanValue = value.replace(/\\/g, '')
+    console.log cleanValue
+    map =
+      title: cleanValue
+      x: maps_ini[cleanValue]['X Size']
+      y: maps_ini[cleanValue]['Y Size']
     area.maps.push map
   area_array.push area
 
