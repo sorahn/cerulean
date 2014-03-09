@@ -5,7 +5,7 @@ head
   title Cerulean Map Viewer
 
   link(rel='stylesheet', href='/bootstrap/dist/css/bootstrap.css')
-  link(rel='stylesheet', href='/public/assets/cerulean.css')
+  link(rel='stylesheet', href='/public/assets/cerulean.min.css')
   link(rel='stylesheet', href='/public/assets/style.css')
 
   script(src='/jquery/dist/jquery.js')
@@ -24,15 +24,21 @@ body
 
   section.contianer-fluid
     .row
-      nav.sidebar.col-sm-3.col-md-2
-        ul.nav.nav-sidebar
-          each map in maps_array
+      nav.sidebar.col-sm-3.col-md-2#accordion
+        ul.nav.sidebar-nav
+          each area in area_array
             li
-              a.js-group(data-title="#{map.title}", data-width="#{map['X Size']}", data-height="#{map['Y Size']}") #{map.title}
+              a(data-toggle="collapse" data-parent="#accordion" href="##{area.id}") #{area.title}
+
+              .collapse(id="#{area.id}")
+                ul
+                  each map in area.maps
+                    li
+                      a.js-group(data-title="#{map.title}" data-width="#{map.x}", data-height="#{map.y}") #{map.title}
 
       main.main.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2
+        //- pre #{JSON.stringify(maps_array)}
         block main
-
 
 script.
 

@@ -5,20 +5,30 @@ harp       = require 'harp'
 util       = require 'util'
 async      = require 'async'
 express    = require 'express'
+slug       = require 'slug'
 app        = express()
 
 # Parse an ini file
 parse_ini  = (file) -> ini.parse fs.readFileSync file, 'utf-8'
 
-maps_array = []
+area_array = []
 maps_ini   = parse_ini 'ini/Maps.ini'
 tiles_ini  = parse_ini 'ini/Tilesets.ini'
-maplist    = parse_ini 'ini/Main.ini'
+arealist   = parse_ini 'ini/Main.ini'
 
-# Set up a better maps array
-for title, map of maps_ini
-  map.title = title
-  maps_array.push map
+for title, maplist of arealist
+  area =
+    title: title
+    id: slug title
+    maps: []
+  for key, value of maplist
+    cleanValue = value.replace /\\/g, ''
+    map =
+      title: cleanValue
+      x: maps_ini[cleanValue]['X Size']
+      y: maps_ini[cleanValue]['Y Size']
+    area.maps.push map
+  area_array.push area
 
 # Console Log with util.inspect built in.
 clog = (obj) -> console.log util.inspect obj, {depth: 5, colors: true}
@@ -132,7 +142,7 @@ app.configure ->
   app.use '/public', express.static "#{__dirname}/public"
   app.use '/public', harp.mount "#{__dirname}/public"
 
-app.get '/', (req, res) -> res.render 'index', {maplist, maps_array}
+app.get '/', (req, res) -> res.render 'index', {maplist, area_array}
 
 app.get '/tileset/:num', ({params: {num}}, res) ->
   get_tileset num, (err, [template, data]) -> res.render template, data
