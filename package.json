@@ -1,7 +1,7 @@
 {
-  "name": "shadow-of-silver",
+  "name": "cerulean",
   "version": "0.0.1",
-  "description": "Mapping the Pokemon regions around Mt. Silver",
+  "description": "Cerulean Pokémon Map Viewer",
   "main": "web.coffee",
   "dependencies": {
     "async": "~0.2.10",
@@ -10,7 +10,8 @@
     "lodash": "~2.4.1",
     "jade": "~1.3.0",
     "harp": "^0.11.2",
-    "slug": "^0.4.2"
+    "slug": "^0.4.2",
+    "binary": "^0.3.0"
   },
   "engines": {
     "node": "0.10.x",
