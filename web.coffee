@@ -10,17 +10,34 @@ app        = express()
 # Parse an ini file
 parse_ini  = (file) -> ini.parse fs.readFileSync file, 'utf-8'
 
-maps_array = []
+maps_array = {}
+area_array = []
 maps_ini   = parse_ini 'ini/Maps.ini'
 tiles_ini  = parse_ini 'ini/Tilesets.ini'
-maplist    = parse_ini 'ini/Main.ini'
+arealist   = parse_ini 'ini/Main.ini'
 
 # Set up a better maps array
-for title, map of maplist
-  area = {}
-  area.title = title
-  area.maps = map
-  maps_array.push area
+for title, map of maps_ini
+  maps_array[title.replace('\\', '')] = map
+
+for title, maplist of arealist
+  if title != 'Beta Maps'
+    area = {}
+    area.title = title
+    area.id = title.replace(/\s*/g, '')
+    area.maps = []
+    for key, value of maplist
+      map = {}
+      map.title = value.replace('\\', '')
+      console.log map.title
+      if maps_array[value]?
+        map.x = maps_array[value]['X Size']
+        map.y = maps_array[value]['Y Size']
+      else
+        map.x = 10
+        map.y = 10
+      area.maps.push map
+    area_array.push area
 
 # Console Log with util.inspect built in.
 clog = (obj) -> console.log util.inspect obj, {depth: 5, colors: true}
@@ -134,7 +151,7 @@ app.configure ->
   app.use '/public', express.static "#{__dirname}/public"
   app.use '/public', harp.mount "#{__dirname}/public"
 
-app.get '/', (req, res) -> res.render 'index', {maplist, maps_array}
+app.get '/', (req, res) -> res.render 'index', {maplist, area_array, maps_array}
 
 app.get '/tileset/:num', ({params: {num}}, res) ->
   get_tileset num, (err, [template, data]) -> res.render template, data

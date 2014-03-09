@@ -5,7 +5,7 @@ head
   title Cerulean Map Viewer
 
   link(rel='stylesheet', href='/bootstrap/dist/css/bootstrap.css')
-  link(rel='stylesheet', href='/public/assets/cerulean.css')
+  link(rel='stylesheet', href='/public/assets/cerulean.min.css')
   link(rel='stylesheet', href='/public/assets/style.css')
 
   script(src='/jquery/dist/jquery.js')
@@ -24,21 +24,20 @@ body
 
   section.contianer-fluid
     .row
-      nav.sidebar.col-sm-3.col-md-2
-        .panel-group#accordion
-          each area in maps_array
-            .panel.panel-default
-              .panel-heading
-                h4.panel-title
-                  a(data-toggle="collapse" data-parent="#accordion" href="##{area.title.replace(/\s*/g, '')}") #{area.title}
+      nav.sidebar.col-sm-3.col-md-2#accordion
+        ul.nav.sidebar-nav
+          each area in area_array
+            li
+              a(data-toggle="collapse" data-parent="#accordion" href="##{area.id}") #{area.title}
 
-              .panel-collapse.collapse(id="#{area.title.replace(/\s*/g, '')}")
+              .collapse(id="#{area.id}")
                 ul
                   each map in area.maps
                     li
-                      a.js-group(data-title="#{map}" data-width="#{map['X Size']}", data-height="#{map['Y Size']}") #{map}
+                      a.js-group(data-title="#{map.title}" data-width="#{map.x}", data-height="#{map.y}") #{map.title}
 
       main.main.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2
+        //- pre #{JSON.stringify(maps_array)}
         block main
 
 script.
