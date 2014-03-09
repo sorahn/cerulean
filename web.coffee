@@ -5,6 +5,7 @@ harp       = require 'harp'
 util       = require 'util'
 async      = require 'async'
 express    = require 'express'
+slug       = require 'slug'
 app        = express()
 
 # Parse an ini file
@@ -18,11 +19,10 @@ arealist   = parse_ini 'ini/Main.ini'
 for title, maplist of arealist
   area =
     title: title
-    id: title.replace(/\s*/g, '')
+    id: slug title
     maps: []
   for key, value of maplist
-    cleanValue = value.replace(/\\/g, '')
-    console.log cleanValue
+    cleanValue = value.replace /\\/g, ''
     map =
       title: cleanValue
       x: maps_ini[cleanValue]['X Size']
