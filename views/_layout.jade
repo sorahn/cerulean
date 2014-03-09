@@ -26,7 +26,7 @@ body
     .row
       nav.sidebar.col-sm-3.col-md-2#accordion
         ul.nav.sidebar-nav
-          each area in area_array
+          each area in main_array
             li
               a(data-toggle="collapse" data-parent="#accordion" href="##{area.id}") #{area.title}
 

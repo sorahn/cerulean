@@ -7,16 +7,14 @@ async      = require 'async'
 express    = require 'express'
 slug       = require 'slug'
 app        = express()
+cerulean   = require('./lib/cerulean') app
 
-# Parse an ini file
-parse_ini  = (file) -> ini.parse fs.readFileSync file, 'utf-8'
+main_array = []
+maps_ini   = cerulean.get 'maps'
+tiles_ini  = cerulean.get 'tiles'
+main_ini   = cerulean.get 'main'
 
-area_array = []
-maps_ini   = parse_ini 'ini/Maps.ini'
-tiles_ini  = parse_ini 'ini/Tilesets.ini'
-arealist   = parse_ini 'ini/Main.ini'
-
-for title, maplist of arealist
+for title, maplist of main_ini
   area =
     title: title
     id: slug title
@@ -28,7 +26,7 @@ for title, maplist of arealist
       x: maps_ini[cleanValue]['X Size']
       y: maps_ini[cleanValue]['Y Size']
     area.maps.push map
-  area_array.push area
+  main_array.push area
 
 # Console Log with util.inspect built in.
 clog = (obj) -> console.log util.inspect obj, {depth: 5, colors: true}
@@ -142,7 +140,7 @@ app.configure ->
   app.use '/public', express.static "#{__dirname}/public"
   app.use '/public', harp.mount "#{__dirname}/public"
 
-app.get '/', (req, res) -> res.render 'index', {maplist, area_array}
+app.get '/', (req, res) -> res.render 'index', {maplist, main_array}
 
 app.get '/tileset/:num', ({params: {num}}, res) ->
   get_tileset num, (err, [template, data]) -> res.render template, data
