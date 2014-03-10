@@ -10,8 +10,9 @@
     "lodash": "~2.4.1",
     "jade": "~1.3.0",
     "harp": "^0.11.2",
-    "slug": "^0.4.2",
-    "binary": "^0.3.0"
+    "binary": "^0.3.0",
+    "byline": "^4.1.1",
+    "coffee-script": "^1.7.1"
   },
   "engines": {
     "node": "0.10.x",

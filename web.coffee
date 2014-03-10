@@ -1,10 +1,15 @@
+harp       = require 'harp'
+require 'coffee-script/register'
+###
+ Harp / Terraform are using the wrong coffescript versions, I'm re-register-ing
+ coffee-script here to use the right parser for included files.
+###
+
 _          = require 'lodash'
 fs         = require 'fs'
-harp       = require 'harp'
 util       = require 'util'
 async      = require 'async'
 express    = require 'express'
-slug       = require 'slug'
 app        = express()
 cerulean   = do require './lib/cerulean'
 
